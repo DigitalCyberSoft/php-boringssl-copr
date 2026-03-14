@@ -56,12 +56,12 @@ srpm:
 	@echo "  BoringSSL tarball: $$(du -h boringssl-$(BSSL_DATE).tar.gz | cut -f1)"
 
 	# Get PHP version from installed php-devel
-	PHP_VER=$$(php-config --version | sed 's/\([0-9]*\)\.\([0-9]*\)\..*/\1\2/'); \
+	PHP_VER=$$(php-config --version); \
 		echo "  PHP version tag: php$$PHP_VER"
 
 	# Generate spec file
 	@echo "=== Generating spec file ==="
-	@PHP_VER=$$(php-config --version | sed 's/\([0-9]*\)\.\([0-9]*\)\..*/\1\2/'); \
+	@PHP_VER=$$(php-config --version); \
 	( \
 	echo '# we dont want -z defs linker flag'; \
 	echo '%undefine _strict_symbol_defs_build'; \
