@@ -31,7 +31,7 @@ srpm:
 	@echo "Extension version: $(EXT_VERSION)"
 
 	# Install SRPM build dependencies
-	dnf -y install git rpm-build curl php-devel
+	dnf -y install git rpm-build curl
 
 	# Download php-boringssl source
 	@echo "=== Downloading php-boringssl $(EXT_VERSION) ==="
@@ -68,7 +68,7 @@ srpm:
 	echo ''; \
 	echo 'Name:           php-%{pecl_name}'; \
 	echo 'Version:        $(EXT_VERSION)'; \
-	echo 'Release:        1.bssl%{bssl_date}.php%{php_version}%{?dist}'; \
+	echo 'Release:        1.bssl%{bssl_date}%{?dist}'; \
 	echo 'Summary:        BoringSSL TLS extension for PHP'; \
 	echo ''; \
 	echo 'License:        ISC'; \
