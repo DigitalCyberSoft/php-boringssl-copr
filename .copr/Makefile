@@ -10,12 +10,13 @@
 # COPR provides outdir, set default for local testing
 outdir ?= .
 
-# Extension source -- fetch latest from GitHub
+# Extension source -- fetch latest release from GitHub
 EXT_REPO = https://github.com/DigitalCyberSoft/php-boringssl
-EXT_VERSION := $(shell curl -sf https://raw.githubusercontent.com/DigitalCyberSoft/php-boringssl/master/php_boringssl.h 2>/dev/null | sed -n '/#define PHP_BORINGSSL_VERSION/{s/.* "//;s/".*//;p}')
+EXT_VERSION := $(shell curl -s https://api.github.com/repos/DigitalCyberSoft/php-boringssl/releases/latest | sed -n 's/.*"tag_name": *"v\?\([^"]*\)".*/\1/p')
 ifeq ($(EXT_VERSION),)
 EXT_VERSION := 0.1.0
 endif
+EXT_URL = $(EXT_REPO)/archive/refs/tags/v$(EXT_VERSION).tar.gz
 
 # BoringSSL source
 BSSL_REPO = https://boringssl.googlesource.com/boringssl
@@ -34,10 +35,7 @@ srpm:
 
 	# Download php-boringssl source
 	@echo "=== Downloading php-boringssl $(EXT_VERSION) ==="
-	curl -sfL -o php-boringssl-$(EXT_VERSION).tar.gz \
-		$(EXT_REPO)/archive/refs/tags/v$(EXT_VERSION).tar.gz || \
-	curl -sfL -o php-boringssl-$(EXT_VERSION).tar.gz \
-		$(EXT_REPO)/archive/refs/heads/master.tar.gz
+	curl -sfL -o php-boringssl-$(EXT_VERSION).tar.gz $(EXT_URL) || exit 1
 	@echo "  Source tarball ready"
 
 	# Clone BoringSSL (depth=1 for speed, we only need headers + source)
@@ -70,7 +68,7 @@ srpm:
 	echo ''; \
 	echo 'Name:           php-%{pecl_name}'; \
 	echo 'Version:        $(EXT_VERSION)'; \
-	echo 'Release:        1.bssl%{bssl_date}%{?dist}'; \
+	echo 'Release:        1.bssl%{bssl_date}.php%{php_major_version}%{php_minor_version}%{?dist}'; \
 	echo 'Summary:        BoringSSL TLS extension for PHP'; \
 	echo ''; \
 	echo 'License:        ISC'; \
@@ -132,6 +130,7 @@ srpm:
 	echo 'mkdir -p build && cd build'; \
 	echo 'cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON \'; \
 	echo '      -DCMAKE_BUILD_TYPE=Release \'; \
+	echo '      -DBUILD_TESTING=OFF \'; \
 	echo '      -GNinja ..'; \
 	echo 'ninja -j%{?_smp_build_ncpus:%{_smp_build_ncpus}}%{!?_smp_build_ncpus:$$(nproc)} ssl crypto'; \
 	echo 'cd ../../'; \
@@ -151,6 +150,7 @@ srpm:
 	echo 'cd "$$BSSL_DIR" && mkdir -p build && cd build'; \
 	echo 'cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON \'; \
 	echo '      -DCMAKE_BUILD_TYPE=Release \'; \
+	echo '      -DBUILD_TESTING=OFF \'; \
 	echo '      -GNinja ..'; \
 	echo 'ninja -j%{?_smp_build_ncpus:%{_smp_build_ncpus}}%{!?_smp_build_ncpus:$$(nproc)} ssl crypto'; \
 	echo 'cd ../../'; \
