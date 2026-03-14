@@ -18,6 +18,9 @@ EXT_VERSION := 0.1.0
 endif
 EXT_URL = $(EXT_REPO)/archive/refs/tags/v$(EXT_VERSION).tar.gz
 
+# Release counter (bumped by check_php_version.sh on PHP updates)
+RELEASE := $(shell cat $(CURDIR)/release 2>/dev/null || echo 1)
+
 # BoringSSL source
 BSSL_REPO = https://boringssl.googlesource.com/boringssl
 
@@ -68,7 +71,7 @@ srpm:
 	echo ''; \
 	echo 'Name:           php-%{pecl_name}'; \
 	echo 'Version:        $(EXT_VERSION)'; \
-	echo 'Release:        1.bssl%{bssl_date}%{?dist}'; \
+	echo 'Release:        $(RELEASE).bssl%{bssl_date}%{?dist}'; \
 	echo 'Summary:        BoringSSL TLS extension for PHP'; \
 	echo ''; \
 	echo 'License:        ISC'; \
