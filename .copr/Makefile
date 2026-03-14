@@ -31,7 +31,7 @@ srpm:
 	@echo "Extension version: $(EXT_VERSION)"
 
 	# Install SRPM build dependencies
-	dnf -y install git rpm-build curl
+	dnf -y install git rpm-build curl php-devel
 
 	# Download php-boringssl source
 	@echo "=== Downloading php-boringssl $(EXT_VERSION) ==="
