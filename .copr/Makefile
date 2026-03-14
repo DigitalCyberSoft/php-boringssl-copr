@@ -34,10 +34,9 @@ srpm:
 
 	# Download php-boringssl source
 	@echo "=== Downloading php-boringssl $(EXT_VERSION) ==="
-	curl -L -o php-boringssl-$(EXT_VERSION).tar.gz \
-		$(EXT_REPO)/archive/refs/tags/v$(EXT_VERSION).tar.gz \
-		2>/dev/null || \
-	curl -L -o php-boringssl-$(EXT_VERSION).tar.gz \
+	curl -sfL -o php-boringssl-$(EXT_VERSION).tar.gz \
+		$(EXT_REPO)/archive/refs/tags/v$(EXT_VERSION).tar.gz || \
+	curl -sfL -o php-boringssl-$(EXT_VERSION).tar.gz \
 		$(EXT_REPO)/archive/refs/heads/master.tar.gz
 	@echo "  Source tarball ready"
 
