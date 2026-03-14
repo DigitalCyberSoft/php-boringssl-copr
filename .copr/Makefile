@@ -55,9 +55,14 @@ srpm:
 		boringssl/
 	@echo "  BoringSSL tarball: $$(du -h boringssl-$(BSSL_DATE).tar.gz | cut -f1)"
 
+	# Get PHP version from installed php-devel
+	PHP_VER=$$(php-config --version | sed 's/\([0-9]*\)\.\([0-9]*\)\..*/\1\2/'); \
+		echo "  PHP version tag: php$$PHP_VER"
+
 	# Generate spec file
 	@echo "=== Generating spec file ==="
-	@( \
+	@PHP_VER=$$(php-config --version | sed 's/\([0-9]*\)\.\([0-9]*\)\..*/\1\2/'); \
+	( \
 	echo '# we dont want -z defs linker flag'; \
 	echo '%undefine _strict_symbol_defs_build'; \
 	echo ''; \
@@ -68,7 +73,7 @@ srpm:
 	echo ''; \
 	echo 'Name:           php-%{pecl_name}'; \
 	echo 'Version:        $(EXT_VERSION)'; \
-	echo 'Release:        1.bssl%{bssl_date}.php%{php_major_version}%{php_minor_version}%{?dist}'; \
+	echo "Release:        1.bssl%{bssl_date}.php$${PHP_VER}%{?dist}"; \
 	echo 'Summary:        BoringSSL TLS extension for PHP'; \
 	echo ''; \
 	echo 'License:        ISC'; \
