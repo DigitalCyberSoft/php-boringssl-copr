@@ -130,6 +130,8 @@ srpm:
 	echo 'mkdir -p build && cd build'; \
 	echo 'cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON \'; \
 	echo '      -DCMAKE_BUILD_TYPE=Release \'; \
+	echo '      -DCMAKE_C_FLAGS="-Wno-array-bounds" \'; \
+	echo '      -DCMAKE_CXX_FLAGS="-Wno-array-bounds" \'; \
 	echo '      -DBUILD_TESTING=OFF \'; \
 	echo '      -GNinja ..'; \
 	echo 'ninja -j%{?_smp_build_ncpus:%{_smp_build_ncpus}}%{!?_smp_build_ncpus:$$(nproc)} ssl crypto'; \
@@ -150,6 +152,8 @@ srpm:
 	echo 'cd "$$BSSL_DIR" && mkdir -p build && cd build'; \
 	echo 'cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON \'; \
 	echo '      -DCMAKE_BUILD_TYPE=Release \'; \
+	echo '      -DCMAKE_C_FLAGS="-Wno-array-bounds" \'; \
+	echo '      -DCMAKE_CXX_FLAGS="-Wno-array-bounds" \'; \
 	echo '      -DBUILD_TESTING=OFF \'; \
 	echo '      -GNinja ..'; \
 	echo 'ninja -j%{?_smp_build_ncpus:%{_smp_build_ncpus}}%{!?_smp_build_ncpus:$$(nproc)} ssl crypto'; \
